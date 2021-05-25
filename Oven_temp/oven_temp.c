@@ -26,7 +26,7 @@ const char *xxlabel = "Time [min]";
 const char *yylabel = "Temperature [c]";
 
 const int x_min = 0;   ///x range min
-const int x_max = 400; ///x range max
+const int x_max = 500; ///x range max
 const int y_min = 0;   ///y range min
 const int y_max = 150; ///y range max
 
