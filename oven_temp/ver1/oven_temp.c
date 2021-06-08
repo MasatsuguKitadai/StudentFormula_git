@@ -69,7 +69,7 @@ double main()
 
     // 最後の行以外を読み込み，配列に格納する
 
-    while (fscanf(read, "%d %lf", date, &temp) != EOF)
+    while (fscanf(read, "%s %lf %s", date, &temp, c) != EOF)
     {
         i = i + 1;
         data[i] = temp;
@@ -77,7 +77,7 @@ double main()
 
     // EOFで判別できない最後の行を読み込む
 
-    fscanf(read, "%d %lf", date, &temp);
+    fscanf(read, "%s %lf %s", date, &temp, c);
     i = i + 1;
     data[i] = temp;
     fclose(read);
