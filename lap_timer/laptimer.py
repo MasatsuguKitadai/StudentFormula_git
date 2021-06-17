@@ -45,25 +45,25 @@ while True:
     white_pixel_number = pixel_sum/255
     # print(white_pixel_number)
 
-    if cv2.waitKey(1) == 13:
-         break
-
-cv2.destroyAllWindows()  # ウィンドウを破棄
-
-"""
-    if white_pixel_number > 5000:
+    if white_pixel_number > 8000:
         total_time = time.time() - start
         lap_time = time.time() - lap_start
         lap_start = time.time()
         print()
         print("total_time", [i], "=", total_time)
         print("lap_time  ", [i], "=", lap_time)
+
+        # ファイルへの書き込み
+        f = open('laptime.csv', 'a', encoding='UTF-8')
+        datalist = [str(i),",", str(lap_time),",", str(total_time),'\n']
+        f.writelines(datalist)
+        f.close()
+
         i = i + 1
         t = 0
 
-        while t < 2:
-            t = lap_start - time.time() 
-            ret, frame = movie.read()
-            continue
-"""
+    elif cv2.waitKey(1) == 13:
+         break
+
+cv2.destroyAllWindows()  # ウィンドウを破棄
         
