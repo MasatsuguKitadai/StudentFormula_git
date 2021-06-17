@@ -18,6 +18,11 @@ lap_time = 0
 total_time = 0
 i = 0
 
+f = open('laptime.csv', 'a', encoding='UTF-8')
+datalist = ["lap, lap_time, total_time",'\n']
+f.writelines(datalist)
+f.close()
+
 while True:
 
     ret, frame = movie.read()
