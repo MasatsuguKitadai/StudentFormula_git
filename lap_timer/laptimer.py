@@ -1,11 +1,9 @@
 import time
+import datetime
 import cv2
 import numpy as np
 
-start = time.time()
-
-# webcam for ubuntu
-# movie = cv2.VideoCapture(2)
+n = 2000 # 判定するピクセル数
 
 # webcamera for windows
 movie = cv2.VideoCapture(0)
@@ -15,13 +13,28 @@ fps = int(movie.get(cv2.CAP_PROP_FPS))
 
 lap_start = 0
 lap_time = 0
-total_time = 0
+total_time_1 = 0
+total_time_2 = 0
+lap_time_x = 0
 i = 0
+key = 0
+date = 0
 
+date = datetime.datetime.now()
 f = open('laptime.csv', 'a', encoding='UTF-8')
-datalist = ["lap, lap_time, total_time",'\n']
-f.writelines(datalist)
+datalist_1 = [str(date),"\n"]
+f.writelines(datalist_1)
+datalist_2 = ["lap, lap_time, total_time",'\n']
+f.writelines(datalist_2)
 f.close()
+
+while True:
+    print("「Enter」を押して計測を開始")
+    key = input()
+    if key == '':
+        break
+
+initial_time = time.time()
 
 while True:
 
@@ -43,32 +56,42 @@ while True:
     contours = cv2.findContours(
         thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
-    # cv2.imshow("frame", contours)
-    cv2.imshow("frame", frame)
+    cv2.imshow("frame", contours)
+    # cv2.imshow("frame", frame)
 
     pixel_sum = np.sum(contours)
     white_pixel_number = pixel_sum/255
-    # print(white_pixel_number)
 
-    if white_pixel_number > 8000:
-        total_time = time.time() - start
-        lap_time = time.time() - lap_start
-        lap_start = time.time()
-        print()
-        print("total_time", [i], "=", total_time)
-        print("lap_time  ", [i], "=", lap_time)
+    if white_pixel_number > n:
+        total_time_1 = time.time() - initial_time
+        lap_time = total_time_1 - total_time_2
+        total_time_2 = total_time_1
 
-        # ファイルへの書き込み
-        f = open('laptime.csv', 'a', encoding='UTF-8')
-        datalist = [str(i),",", str(lap_time),",", str(total_time),'\n']
-        f.writelines(datalist)
-        f.close()
+        if lap_time > 1:
 
-        i = i + 1
-        t = 0
+            i = i + 1
+            lap_time = lap_time + lap_time_x
+
+            # ファイルへの書き込み
+            f = open('laptime.csv', 'a', encoding='UTF-8')
+            datalist = [str(i),",", str(lap_time),",", str(total_time_1),'\n']
+            f.writelines(datalist)
+            f.close()
+
+            print()
+            print("total_time", [i], "=", total_time_1)
+            print("lap_time  ", [i], "=", lap_time)
+
+            lap_time_x = 0            
+            t = 0
+
+        else:
+            lap_time_x = lap_time
 
     elif cv2.waitKey(1) == 13:
-         break
+        f = open('laptime.csv', 'a', encoding='UTF-8')
+        f.write('\n')
+        f.close()
+        break
 
 cv2.destroyAllWindows()  # ウィンドウを破棄
-        
